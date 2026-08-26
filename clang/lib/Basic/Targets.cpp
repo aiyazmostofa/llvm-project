@@ -35,6 +35,7 @@
 #include "Targets/Sparc.h"
 #include "Targets/SystemZ.h"
 #include "Targets/TCE.h"
+#include "Targets/Tinker.h"
 #include "Targets/VE.h"
 #include "Targets/WebAssembly.h"
 #include "Targets/X86.h"
@@ -570,6 +571,9 @@ std::unique_ptr<TargetInfo> AllocateTarget(const llvm::Triple &Triple,
 
   case llvm::Triple::tcele64:
     return std::make_unique<TCELE64TargetInfo>(Triple, Opts);
+
+  case llvm::Triple::tinker:
+    return std::make_unique<TinkerTargetInfo>(Triple, Opts);
 
   case llvm::Triple::x86:
     if (Triple.isOSDarwin())
