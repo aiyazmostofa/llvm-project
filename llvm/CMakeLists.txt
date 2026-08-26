@@ -621,6 +621,7 @@ set(LLVM_ALL_TARGETS
   Sparc
   SPIRV
   SystemZ
+  Tinker
   VE
   WebAssembly
   X86

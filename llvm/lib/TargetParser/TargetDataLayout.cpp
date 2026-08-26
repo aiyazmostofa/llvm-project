@@ -663,6 +663,8 @@ std::string Triple::computeDataLayout(StringRef ABIName) const {
            "f16:16:64-f32:32:64-f64:64:64-v64:64:64-i128:128-v128:128:128-"
            "v256:256:256-v512:512:512-v1024:1024:1024-v2048:2048:2048-"
            "v4096:4096:4096-a0:0:64-n64";
+  case Triple::tinker:
+    return "e-p:64:8-n64-i64:8-f64:8";
   case Triple::x86:
   case Triple::x86_64:
     return computeX86DataLayout(*this);

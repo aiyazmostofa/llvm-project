@@ -149,6 +149,8 @@ StringRef Triple::getArchTypeName(ArchType Kind) {
     return "thumb";
   case thumbeb:
     return "thumbeb";
+  case tinker:
+    return "tinker";
   case ve:
     return "ve";
   case wasm32:
@@ -497,6 +499,7 @@ Triple::ArchType Triple::getArchTypeForLLVMName(StringRef Name) {
       .Case("tcele64", tcele64)
       .Case("thumb", thumb)
       .Case("thumbeb", thumbeb)
+      .Case("tinker", tinker)
       .Case("x86", x86)
       .Case("i386", x86)
       .Case("x86-64", x86_64)
@@ -620,6 +623,7 @@ Triple::ArchType Triple::parseArch(StringRef ArchName) {
           .Case("armeb", Triple::armeb)
           .Case("thumb", Triple::thumb)
           .Case("thumbeb", Triple::thumbeb)
+          .Case("tinker", Triple::tinker)
           .Case("avr", Triple::avr)
           .Case("m68k", Triple::m68k)
           .Case("msp430", Triple::msp430)
@@ -1005,6 +1009,7 @@ static Triple::ObjectFormatType getDefaultFormat(const Triple &T) {
   case Triple::tcele:
   case Triple::tcele64:
   case Triple::thumbeb:
+  case Triple::tinker:
   case Triple::ve:
   case Triple::xcore:
   case Triple::xtensa:
@@ -1797,6 +1802,7 @@ unsigned Triple::getArchPointerBitWidth(llvm::Triple::ArchType Arch) {
   case llvm::Triple::spir64:
   case llvm::Triple::spirv64:
   case llvm::Triple::tcele64:
+  case llvm::Triple::tinker:
   case llvm::Triple::systemz:
   case llvm::Triple::ve:
   case llvm::Triple::wasm64:
@@ -1846,6 +1852,7 @@ Triple Triple::get32BitArchVariant() const {
   case Triple::bpfel:
   case Triple::msp430:
   case Triple::systemz:
+  case Triple::tinker:
   case Triple::ve:
     T.setArch(UnknownArch);
     break;
@@ -1993,6 +2000,7 @@ Triple Triple::get64BitArchVariant() const {
   case Triple::spirv64:
   case Triple::systemz:
   case Triple::tcele64:
+  case Triple::tinker:
   case Triple::ve:
   case Triple::wasm64:
   case Triple::x86_64:
@@ -2101,6 +2109,7 @@ Triple Triple::getBigEndianArchVariant() const {
   case Triple::spirv32:
   case Triple::spirv64:
   case Triple::tcele64:
+  case Triple::tinker:
   case Triple::wasm32:
   case Triple::wasm64:
   case Triple::x86:
@@ -2248,6 +2257,7 @@ bool Triple::isLittleEndian() const {
   case Triple::tcele:
   case Triple::tcele64:
   case Triple::thumb:
+  case Triple::tinker:
   case Triple::ve:
   case Triple::wasm32:
   case Triple::wasm64:
