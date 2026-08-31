@@ -11,5 +11,7 @@ public:
                       std::optional<CodeModel::Model> CM, CodeGenOptLevel OL,
                       bool JIT);
   ~TinkerTargetMachine() override;
+
+  TargetPassConfig *createPassConfig(PassManagerBase &PM) override;
 };
 } // namespace llvm
