@@ -10,8 +10,13 @@ tablegen(LLVM TinkerGenDAGISel.inc -gen-dag-isel)
 
 add_llvm_target(TinkerCodeGen
   TinkerTargetMachine.cpp
+  TinkerTargetObjectFile.cpp
   TinkerAsmPrinter.cpp
   TinkerDAGToDAGISel.cpp
+  TinkerRegisterInfo.cpp
+  TinkerFrameLowering.cpp
+  TinkerSubtarget.cpp
+  TinkerISelLowering.cpp
 
   LINK_COMPONENTS
   MC

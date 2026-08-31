@@ -1,6 +1,7 @@
 #pragma once
 
-#include "TinkerInstrInfo.h"
+#include "TinkerFrameLowering.h"
+#include "TinkerISelLowering.h"
 #include "TinkerRegisterInfo.h"
 #include "llvm/CodeGen/TargetSubtargetInfo.h"
 
@@ -10,13 +11,26 @@
 namespace llvm {
 
 class TinkerSubtarget : public TinkerGenSubtargetInfo {
-  TinkerInstrInfo InstrInfo;
+  virtual void anchor();
+
   TinkerRegisterInfo RegisterInfo;
+  TinkerFrameLowering FrameLowering;
+  TinkerTargetLowering TLInfo;
 
 public:
-  const TinkerInstrInfo *getInstrInfo() const override { return &InstrInfo; }
+  TinkerSubtarget(const Triple &TT, const std::string &CPU,
+                  const std::string &FS, const TargetMachine &TM);
+
+  void ParseSubtargetFeatures(StringRef CPU, StringRef TuneCPU, StringRef FS);
+
+  const TinkerFrameLowering *getFrameLowering() const override {
+    return &FrameLowering;
+  }
   const TinkerRegisterInfo *getRegisterInfo() const override {
     return &RegisterInfo;
+  }
+  const TinkerTargetLowering *getTargetLowering() const override {
+    return &TLInfo;
   }
 };
 

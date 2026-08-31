@@ -1,5 +1,6 @@
 #include "TinkerTargetMachine.h"
 #include "Tinker.h"
+#include "TinkerTargetObjectFile.h"
 #include "TargetInfo/TinkerTargetInfo.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/CodeGen/TargetPassConfig.h"
@@ -15,8 +16,20 @@ TinkerTargetMachine::TinkerTargetMachine(const Target &T, const Triple &TT,
                                          CodeGenOptLevel OL, bool JIT)
     : CodeGenTargetMachineImpl(T, TT, CPU, FS, Options,
                                RM ? *RM : Reloc::Static,
-                               CM ? *CM : CodeModel::Small, OL) {}
+                               CM ? *CM : CodeModel::Small, OL),
+      TLOF(std::make_unique<TinkerTargetObjectFile>()) {
+  initAsmInfo();
+}
 TinkerTargetMachine::~TinkerTargetMachine() = default;
+
+const TinkerSubtarget *
+TinkerTargetMachine::getSubtargetImpl(const Function &F) const {
+  if (!SubtargetSingleton)
+    SubtargetSingleton =
+        std::make_unique<TinkerSubtarget>(TargetTriple, TargetCPU, TargetFS,
+                                          *this);
+  return SubtargetSingleton.get();
+}
 
 namespace {
 
