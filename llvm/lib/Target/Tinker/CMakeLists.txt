@@ -7,6 +7,7 @@ tablegen(LLVM TinkerGenSubtargetInfo.inc -gen-subtarget)
 tablegen(LLVM TinkerGenMCCodeEmitter.inc -gen-emitter)
 tablegen(LLVM TinkerGenAsmWriter.inc -gen-asm-writer)
 tablegen(LLVM TinkerGenDAGISel.inc -gen-dag-isel)
+tablegen(LLVM TinkerGenCallingConv.inc -gen-callingconv)
 
 add_llvm_target(TinkerCodeGen
   TinkerTargetMachine.cpp
