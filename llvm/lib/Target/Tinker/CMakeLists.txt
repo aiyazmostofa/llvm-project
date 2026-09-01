@@ -16,6 +16,7 @@ add_llvm_target(TinkerCodeGen
   TinkerDAGToDAGISel.cpp
   TinkerRegisterInfo.cpp
   TinkerFrameLowering.cpp
+  TinkerInstrInfo.cpp
   TinkerSubtarget.cpp
   TinkerISelLowering.cpp
 

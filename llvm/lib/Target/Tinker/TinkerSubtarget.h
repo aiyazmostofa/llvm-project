@@ -2,6 +2,7 @@
 
 #include "TinkerFrameLowering.h"
 #include "TinkerISelLowering.h"
+#include "TinkerInstrInfo.h"
 #include "TinkerRegisterInfo.h"
 #include "llvm/CodeGen/SelectionDAGTargetInfo.h"
 #include "llvm/CodeGen/TargetSubtargetInfo.h"
@@ -14,7 +15,7 @@ namespace llvm {
 class TinkerSubtarget : public TinkerGenSubtargetInfo {
   virtual void anchor();
 
-  TinkerRegisterInfo RegisterInfo;
+  TinkerInstrInfo InstrInfo;
   TinkerFrameLowering FrameLowering;
   TinkerTargetLowering TLInfo;
   SelectionDAGTargetInfo SDTgtInfo;
@@ -25,11 +26,12 @@ public:
 
   void ParseSubtargetFeatures(StringRef CPU, StringRef TuneCPU, StringRef FS);
 
+  const TinkerInstrInfo *getInstrInfo() const override { return &InstrInfo; }
   const TinkerFrameLowering *getFrameLowering() const override {
     return &FrameLowering;
   }
   const TinkerRegisterInfo *getRegisterInfo() const override {
-    return &RegisterInfo;
+    return &InstrInfo.getRegisterInfo();
   }
   const TinkerTargetLowering *getTargetLowering() const override {
     return &TLInfo;

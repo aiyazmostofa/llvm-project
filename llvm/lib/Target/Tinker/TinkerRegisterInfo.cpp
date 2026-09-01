@@ -12,13 +12,13 @@ TinkerRegisterInfo::TinkerRegisterInfo() : TinkerGenRegisterInfo(Tinker::R0) {}
 
 const MCPhysReg *
 TinkerRegisterInfo::getCalleeSavedRegs(const MachineFunction *MF) const {
-  return nullptr;
+  return CSR_SaveList;
 }
 
 const uint32_t *
 TinkerRegisterInfo::getCallPreservedMask(const MachineFunction &MF,
                                          CallingConv::ID CC) const {
-  return nullptr;
+  return CSR_RegMask;
 }
 
 BitVector TinkerRegisterInfo::getReservedRegs(const MachineFunction &MF) const {
