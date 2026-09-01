@@ -3,6 +3,7 @@
 #include "TinkerFrameLowering.h"
 #include "TinkerISelLowering.h"
 #include "TinkerRegisterInfo.h"
+#include "llvm/CodeGen/SelectionDAGTargetInfo.h"
 #include "llvm/CodeGen/TargetSubtargetInfo.h"
 
 #define GET_SUBTARGETINFO_HEADER
@@ -16,6 +17,7 @@ class TinkerSubtarget : public TinkerGenSubtargetInfo {
   TinkerRegisterInfo RegisterInfo;
   TinkerFrameLowering FrameLowering;
   TinkerTargetLowering TLInfo;
+  SelectionDAGTargetInfo SDTgtInfo;
 
 public:
   TinkerSubtarget(const Triple &TT, const std::string &CPU,
@@ -31,6 +33,9 @@ public:
   }
   const TinkerTargetLowering *getTargetLowering() const override {
     return &TLInfo;
+  }
+  const SelectionDAGTargetInfo *getSelectionDAGInfo() const override {
+    return &SDTgtInfo;
   }
 };
 
