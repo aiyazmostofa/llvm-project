@@ -8,11 +8,27 @@ entry:
   ret i64 %sum
 }
 
+define i64 @addi_i64(i64 %a) {
+; CHECK: addi r0, r1, 1
+; CHECK-NEXT: ret
+entry:
+  %sum = add i64 %a, 1
+  ret i64 %sum
+}
+
 define i64 @sub_i64(i64 %a, i64 %b) {
 ; CHECK: sub r0, r1, r2
 ; CHECK-NEXT: ret
 entry:
   %sum = sub i64 %a, %b
+  ret i64 %sum
+}
+
+define i64 @subi_i64(i64 %a) {
+; CHECK: subi r0, r1, 1
+; CHECK-NEXT: ret
+entry:
+  %sum = sub i64 %a, 1
   ret i64 %sum
 }
 

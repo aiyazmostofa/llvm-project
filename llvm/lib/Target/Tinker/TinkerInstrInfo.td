@@ -1,3 +1,11 @@
+def SubiFromAddi: SDNode<"TinkerISD::SUBI_FROM_ADDI",
+  SDTypeProfile<1, 2, [
+    SDTCisInt<0>,
+    SDTCisInt<1>,
+    SDTCisInt<2>,
+  ]>
+>;
+
 let Pattern = [(set GPR:$dst0, (add GPR:$src0, GPR:$src1))] in
 def Add : InstrFormat3Address<"add", 0x18>;
 
@@ -9,6 +17,13 @@ def Mul : InstrFormat3Address<"mul", 0x1c>;
 
 let Pattern = [(set GPR:$dst0, (sdiv GPR:$src0, GPR:$src1))] in
 def Div : InstrFormat3Address<"div", 0x1d>;
+
+let Pattern = [(set GPR:$dst0, (add GPR:$src0, uimm12:$imm))] in
+def Addi : InstrFormat2AddressUImm<"addi", 0x19>;
+
+def Subi : InstrFormat2AddressUImm<"subi", 0x1b>;
+def : Pat<(sub GPR:$src0, uimm12:$imm), (Subi GPR:$src0, uimm12:$imm)>;
+def : Pat<(SubiFromAddi GPR:$src0, uimm12:$imm), (Subi GPR:$src0, uimm12:$imm)>;
 
 let Pattern = [(set GPR:$dst0, (fadd GPR:$src0, GPR:$src1))] in
 def Addf : InstrFormat3Address<"addf", 0x14>;

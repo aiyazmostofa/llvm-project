@@ -14,6 +14,7 @@ TinkerTargetLowering::TinkerTargetLowering(const TargetMachine &TM,
   addRegisterClass(MVT::i64, &Tinker::GPRRegClass);
   addRegisterClass(MVT::f64, &Tinker::GPRRegClass);
   computeRegisterProperties(STI.getRegisterInfo());
+  setOperationAction(ISD::ADD, MVT::i64, Custom);
 }
 
 #define GET_CALLING_CONV_IMPL
@@ -98,6 +99,31 @@ const char *TinkerTargetLowering::getTargetNodeName(unsigned Opcode) const {
     break;
   case TinkerISD::RETURN_GLUE:
     return "TinkerISD::RETURN_GLUE";
+  case TinkerISD::SUBI_FROM_ADDI:
+    return "TinkerISD::SUBI_FROM_ADDI";
   }
   return nullptr;
+}
+
+SDValue TinkerTargetLowering::LowerOperation(SDValue Op,
+                                             SelectionDAG &DAG) const {
+  switch (Op.getOpcode()) {
+  case ISD::ADD:
+    return LowerADD(Op, DAG);
+  default:
+    report_fatal_error("lower operation not implemented");
+  }
+}
+
+SDValue TinkerTargetLowering::LowerADD(SDValue Op, SelectionDAG &DAG) const {
+  assert(Op.getValueType() == MVT::i64);
+  if (!isa<ConstantSDNode>(Op.getOperand(1))) {
+    return Op;
+  }
+  APInt Value = Op.getConstantOperandAPInt(1);
+  if (Value.isNonNegative()) {
+    return Op;
+  }
+  return DAG.getNode(TinkerISD::SUBI_FROM_ADDI, SDLoc(Op), MVT::i64, Op.getOperand(0),
+                     DAG.getConstant(Value.abs(), SDLoc(Op), MVT::i64));
 }

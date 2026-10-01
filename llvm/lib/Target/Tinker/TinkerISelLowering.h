@@ -14,6 +14,7 @@ namespace TinkerISD {
 enum NodeType : unsigned {
   FIRST_NUMBER = ISD::BUILTIN_OP_END,
   RETURN_GLUE,
+  SUBI_FROM_ADDI,
 };
 
 } // namespace TinkerISD
@@ -37,6 +38,10 @@ public:
                       const SmallVectorImpl<ISD::OutputArg> &Outs,
                       const SmallVectorImpl<SDValue> &OutVals, const SDLoc &DL,
                       SelectionDAG &DAG) const override;
+
+  SDValue LowerOperation(SDValue Op, SelectionDAG &DAG) const override;
+
+  SDValue LowerADD(SDValue Op, SelectionDAG &DAG) const;
 
   const char *getTargetNodeName(unsigned Opcode) const override;
 };
