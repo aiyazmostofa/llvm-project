@@ -12,6 +12,7 @@ TinkerTargetLowering::TinkerTargetLowering(const TargetMachine &TM,
                                            const TinkerSubtarget &STI)
     : TargetLowering(TM, STI) {
   addRegisterClass(MVT::i64, &Tinker::GPRRegClass);
+  addRegisterClass(MVT::f64, &Tinker::GPRRegClass);
   computeRegisterProperties(STI.getRegisterInfo());
 }
 
