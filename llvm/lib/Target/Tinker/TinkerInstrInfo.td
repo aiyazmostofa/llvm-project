@@ -19,9 +19,9 @@ let Pattern = [(set GPR:$dst0, (sdiv GPR:$src0, GPR:$src1))] in
 def Div : InstrFormat3Address<"div", 0x1d>;
 
 let Pattern = [(set GPR:$dst0, (add GPR:$src0, uimm12:$imm))] in
-def Addi : InstrFormat2AddressUImm<"addi", 0x19>;
+def Addi : InstrFormatUImm<"addi", 0x19>;
 
-def Subi : InstrFormat2AddressUImm<"subi", 0x1b>;
+def Subi : InstrFormatUImm<"subi", 0x1b>;
 def : Pat<(sub GPR:$src0, uimm12:$imm), (Subi GPR:$src0, uimm12:$imm)>;
 def : Pat<(SubiFromAddi GPR:$src0, uimm12:$imm), (Subi GPR:$src0, uimm12:$imm)>;
 
@@ -36,6 +36,8 @@ def Mulf : InstrFormat3Address<"mulf", 0x16>;
 
 let Pattern = [(set GPR:$dst0, (fdiv GPR:$src0, GPR:$src1))] in
 def Divf : InstrFormat3Address<"divf", 0x17>;
+
+def Copy : InstrFormat2Address<"mov", 0x11>;
 
 def Ret : InstrFormat<"ret", 0x0d> {
   let Uses = [R0, SP];

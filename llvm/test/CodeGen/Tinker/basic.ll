@@ -9,7 +9,8 @@ entry:
 }
 
 define i64 @addi_i64(i64 %a) {
-; CHECK: addi r0, r1, 1
+; CHECK: mov r0, r1
+; CHECK-NEXT: addi r0, 1
 ; CHECK-NEXT: ret
 entry:
   %sum = add i64 %a, 1
@@ -25,7 +26,8 @@ entry:
 }
 
 define i64 @subi_i64(i64 %a) {
-; CHECK: subi r0, r1, 1
+; CHECK: mov r0, r1
+; CHECK-NEXT: subi r0, 1
 ; CHECK-NEXT: ret
 entry:
   %sum = sub i64 %a, 1

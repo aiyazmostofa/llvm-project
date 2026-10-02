@@ -19,19 +19,24 @@ class InstrFormat2Address<string n, bits<5> Enc> : InstrFormat<n, Enc> {
 
 def GPRLenVT : ValueTypeByHwMode<[DefaultMode], [i64]>;
 
-class InstrFormat2AddressImm<string n, bits<5> Enc, dag ins> : InstrFormat2Address<n, Enc> {
+class InstrFormatImm<string n, bits<5> Enc, dag ins> : InstrFormat<n, Enc> {
+  bits<5> dst0;
+  bits<5> src0;
   bits<12> imm;
+  let Inst{9-5} = dst0;
   let Inst{31-20} = imm;
-  let AsmString = !strconcat(n, " $dst0, $src0, $imm");
+  let AsmString = !strconcat(n, " $dst0, $imm");
   let OutOperandList = (outs GPR:$dst0);
   let InOperandList = ins;
+  // FIXME: Ask Moobonbon why the registers are tied.
+  let Constraints = "$dst0 = $src0";
 }
 
 def uimm12 : Operand<GPRLenVT>, ImmLeaf<GPRLenVT, [{return isUInt<12>(Imm);}]>;
 def simm12 : Operand<GPRLenVT>, ImmLeaf<GPRLenVT, [{return isInt<12>(Imm);}]>;
 
-class InstrFormat2AddressSImm<string n, bits<5> Enc> : InstrFormat2AddressImm<n, Enc, (ins GPR:$src0, simm12:$imm)>;
-class InstrFormat2AddressUImm<string n, bits<5> Enc> : InstrFormat2AddressImm<n, Enc, (ins GPR:$src0, uimm12:$imm)>;
+class InstrFormatSImm<string n, bits<5> Enc> : InstrFormatImm<n, Enc, (ins GPR:$src0, simm12:$imm)>;
+class InstrFormatUImm<string n, bits<5> Enc> : InstrFormatImm<n, Enc, (ins GPR:$src0, uimm12:$imm)>;
 
 class InstrFormat3Address<string n, bits<5> Enc> : InstrFormat2Address<n, Enc> {
   bits<5> src1;
