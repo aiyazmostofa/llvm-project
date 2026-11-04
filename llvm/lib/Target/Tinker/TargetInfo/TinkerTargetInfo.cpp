@@ -1,8 +1,8 @@
-using namespace llvm;
-
 #include "TargetInfo/TinkerTargetInfo.h"
 #include "llvm/MC/TargetRegistry.h"
 #include "llvm/Support/Compiler.h"
+
+using namespace llvm;
 
 Target &llvm::getTheTinkerTarget() {
   static Target TheTinkerTarget;

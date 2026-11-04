@@ -1,5 +1,6 @@
 #include "TinkerRegisterInfo.h"
 #include "TinkerFrameLowering.h"
+#include "TinkerSubtarget.h"
 #include "llvm/CodeGen/MachineFunction.h"
 
 #define GET_REGINFO_ENUM

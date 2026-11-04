@@ -24,6 +24,8 @@ add_llvm_target(TinkerCodeGen
   MC
   Support
   CodeGen
+  SelectionDAG
+  AsmPrinter
 
   ADD_TO_COMPONENT
   Tinker
