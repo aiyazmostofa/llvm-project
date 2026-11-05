@@ -48,7 +48,11 @@ bool TinkerAsmPrinter::lowerOperand(const MachineOperand &MO, MCOperand &MCO) {
     MCO = MCOperand::createExpr(Expr);
     break;
   }
-  case MachineOperand::MO_MachineBasicBlock:
+  case MachineOperand::MO_MachineBasicBlock: {
+    MCO = MCOperand::createExpr(
+        MCSymbolRefExpr::create(MO.getMBB()->getSymbol(), OutContext));
+    break;
+  }
   case MachineOperand::MO_MCSymbol:
   case MachineOperand::MO_JumpTableIndex:
   case MachineOperand::MO_ConstantPoolIndex:

@@ -34,6 +34,11 @@ class InstrFormatImm<string n, bits<5> Enc, dag ins> : InstrFormat<n, Enc> {
 
 def uimm12 : Operand<GPRLenVT>, ImmLeaf<GPRLenVT, [{return isUInt<12>(Imm);}]>;
 def simm12 : Operand<GPRLenVT>, ImmLeaf<GPRLenVT, [{return isInt<12>(Imm);}]>;
+def uimm64 : Operand<GPRLenVT>, ImmLeaf<GPRLenVT, [{return isUInt<64>(Imm);}]>;
+def brtarget : Operand<OtherVT> {
+  let PrintMethod = "printBranchTarget";
+  let OperandType = "OPERAND_PCREL";
+}
 
 class InstrFormatSImm<string n, bits<5> Enc> : InstrFormatImm<n, Enc, (ins GPR:$src0, simm12:$imm)>;
 class InstrFormatUImm<string n, bits<5> Enc> : InstrFormatImm<n, Enc, (ins GPR:$src0, uimm12:$imm)>;

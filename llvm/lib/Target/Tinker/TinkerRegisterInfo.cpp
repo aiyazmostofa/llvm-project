@@ -24,6 +24,8 @@ TinkerRegisterInfo::getCallPreservedMask(const MachineFunction &MF,
 
 BitVector TinkerRegisterInfo::getReservedRegs(const MachineFunction &MF) const {
   BitVector Reserved(getNumRegs());
+  markSuperRegs(Reserved, Tinker::R0);
+  markSuperRegs(Reserved, Tinker::R1);
   markSuperRegs(Reserved, Tinker::SP);
   return Reserved;
 }

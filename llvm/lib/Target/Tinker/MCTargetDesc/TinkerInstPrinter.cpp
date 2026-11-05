@@ -30,3 +30,16 @@ void TinkerInstPrinter::printOperand(const MCInst *MI, unsigned OpNo,
     MAI.printExpr(O, *Op.getExpr());
   }
 }
+
+void TinkerInstPrinter::printBranchTarget(const MCInst *MI, uint64_t Address,
+                                          int OpNum, raw_ostream &O) {
+  const MCOperand &MC = MI->getOperand(OpNum);
+  if (MI->getOperand(OpNum).isImm()) {
+    llvm_unreachable("Can't handle this now");
+  }
+  if (MC.isExpr()) {
+    MAI.printExpr(O, *MC.getExpr());
+  } else {
+    llvm_unreachable("Invalid operand");
+  }
+}

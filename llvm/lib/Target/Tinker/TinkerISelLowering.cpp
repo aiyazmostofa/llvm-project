@@ -15,6 +15,15 @@ TinkerTargetLowering::TinkerTargetLowering(const TargetMachine &TM,
   addRegisterClass(MVT::f64, &Tinker::GPRRegClass);
   computeRegisterProperties(STI.getRegisterInfo());
   setOperationAction(ISD::ADD, MVT::i64, Custom);
+  setOperationAction(ISD::BR_CC, MVT::i64, Expand);
+  setOperationAction(ISD::BRCOND, MVT::Other, Custom);
+  setOperationAction(ISD::SETCC, MVT::i64, Custom);
+  setCondCodeAction(ISD::SETLT, MVT::i64, Expand);
+  setCondCodeAction(ISD::SETLE, MVT::i64, Expand);
+  setCondCodeAction(ISD::SETGE, MVT::i64, Expand);
+  setCondCodeAction(ISD::SETULT, MVT::i64, Expand);
+  setCondCodeAction(ISD::SETULE, MVT::i64, Expand);
+  setCondCodeAction(ISD::SETUGE, MVT::i64, Expand);
 }
 
 #define GET_CALLING_CONV_IMPL
@@ -101,6 +110,14 @@ const char *TinkerTargetLowering::getTargetNodeName(unsigned Opcode) const {
     return "TinkerISD::RETURN_GLUE";
   case TinkerISD::SUBI_FROM_ADDI:
     return "TinkerISD::SUBI_FROM_ADDI";
+  case TinkerISD::TO_BOOL:
+    return "TinkerISD::TO_BOOL";
+  case TinkerISD::LOGICAL_NOT:
+    return "TinkerISD::LOGICAL_NOT";
+  case TinkerISD::NODE_BRANCH_NOT_ZERO:
+    return "TinkerISD::NODE_BRANCH_NOT_ZERO";
+  case TinkerISD::NODE_BRANCH_GREATER:
+    return "TinkerISD::NODE_BRANCH_GREATER";
   }
   return nullptr;
 }
@@ -110,6 +127,10 @@ SDValue TinkerTargetLowering::LowerOperation(SDValue Op,
   switch (Op.getOpcode()) {
   case ISD::ADD:
     return LowerADD(Op, DAG);
+  case ISD::BRCOND:
+    return LowerBRCOND(Op, DAG);
+  case ISD::SETCC:
+    return LowerSETCC(Op, DAG);
   default:
     report_fatal_error("lower operation not implemented");
   }
@@ -126,4 +147,48 @@ SDValue TinkerTargetLowering::LowerADD(SDValue Op, SelectionDAG &DAG) const {
   }
   return DAG.getNode(TinkerISD::SUBI_FROM_ADDI, SDLoc(Op), MVT::i64, Op.getOperand(0),
                      DAG.getConstant(Value.abs(), SDLoc(Op), MVT::i64));
+}
+
+SDValue TinkerTargetLowering::LowerBRCOND(SDValue Op, SelectionDAG &DAG) const {
+  auto Chain = Op.getOperand(0);
+  auto UncastedCond = Op.getOperand(1);
+  auto Target = Op.getOperand(2);
+  if (UncastedCond.getOpcode() != ISD::SETCC) {
+    return DAG.getNode(TinkerISD::NODE_BRANCH_NOT_ZERO, SDLoc(Op),
+                             MVT::Other, Chain, UncastedCond, Target);
+  }
+  auto *Cond = cast<CondCodeSDNode>(UncastedCond.getOperand(2));
+  if (Cond->get() == ISD::CondCode::SETGT) {
+    return DAG.getNode(TinkerISD::NODE_BRANCH_GREATER, SDLoc(Op), MVT::Other,
+                       Chain, UncastedCond.getOperand(0),
+                       UncastedCond.getOperand(1), Target);
+  }
+  if (Cond->get() == ISD::CondCode::SETLT) {
+    return DAG.getNode(TinkerISD::NODE_BRANCH_GREATER, SDLoc(Op), MVT::Other,
+                       Chain, UncastedCond.getOperand(1),
+                       UncastedCond.getOperand(0), Target);
+  }
+  return DAG.getNode(TinkerISD::NODE_BRANCH_NOT_ZERO, SDLoc(Op),
+                             MVT::Other, Chain, UncastedCond, Target);
+}
+
+SDValue TinkerTargetLowering::LowerSETCC(SDValue Op, SelectionDAG &DAG) const {
+  auto *Cond = cast<CondCodeSDNode>(Op.getOperand(2));
+  switch (Cond->get()) {
+  case ISD::SETEQ:
+    return DAG.getNode(
+        TinkerISD::LOGICAL_NOT, SDLoc(Op), MVT::i64,
+        DAG.getNode(TinkerISD::TO_BOOL, SDLoc(Op), MVT::i64,
+                    DAG.getNode(ISD::SUB, SDLoc(Op), MVT::i64, Op.getOperand(0),
+                                Op.getOperand(1))));
+  case ISD::SETNE:
+    return DAG.getNode(TinkerISD::TO_BOOL, SDLoc(Op), MVT::i64,
+                       DAG.getNode(ISD::SUB, SDLoc(Op), MVT::i64,
+                                   Op.getOperand(0), Op.getOperand(1)));
+  case ISD::SETUGT:
+  case ISD::SETGT:
+    report_fatal_error("setcc operation lower not implemented yet");
+  default:
+    return Op;
+  }
 }

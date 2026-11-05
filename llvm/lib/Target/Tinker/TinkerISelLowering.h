@@ -15,6 +15,10 @@ enum NodeType : unsigned {
   FIRST_NUMBER = ISD::BUILTIN_OP_END,
   RETURN_GLUE,
   SUBI_FROM_ADDI,
+  TO_BOOL,
+  LOGICAL_NOT,
+  NODE_BRANCH_NOT_ZERO,
+  NODE_BRANCH_GREATER,
 };
 
 } // namespace TinkerISD
@@ -42,6 +46,8 @@ public:
   SDValue LowerOperation(SDValue Op, SelectionDAG &DAG) const override;
 
   SDValue LowerADD(SDValue Op, SelectionDAG &DAG) const;
+  SDValue LowerBRCOND(SDValue Op, SelectionDAG &DAG) const;
+  SDValue LowerSETCC(SDValue Op, SelectionDAG &DAG) const;
 
   const char *getTargetNodeName(unsigned Opcode) const override;
 };
