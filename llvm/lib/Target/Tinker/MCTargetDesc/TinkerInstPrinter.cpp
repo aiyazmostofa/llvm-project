@@ -9,8 +9,7 @@ using namespace llvm;
 #include "TinkerGenAsmWriter.inc"
 
 void TinkerInstPrinter::printInst(const MCInst *MI, uint64_t Address,
-                                  StringRef Annot,
-                                  const MCSubtargetInfo &STI,
+                                  StringRef Annot, const MCSubtargetInfo &STI,
                                   raw_ostream &O) {
   if (!PrintAliases || !printAliasInstr(MI, Address, O))
     printInstruction(MI, Address, O);

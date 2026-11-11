@@ -1,7 +1,7 @@
 #include "TinkerTargetMachine.h"
+#include "TargetInfo/TinkerTargetInfo.h"
 #include "Tinker.h"
 #include "TinkerTargetObjectFile.h"
-#include "TargetInfo/TinkerTargetInfo.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/CodeGen/TargetPassConfig.h"
 #include "llvm/InitializePasses.h"
@@ -25,9 +25,8 @@ TinkerTargetMachine::~TinkerTargetMachine() = default;
 const TinkerSubtarget *
 TinkerTargetMachine::getSubtargetImpl(const Function &F) const {
   if (!SubtargetSingleton)
-    SubtargetSingleton =
-        std::make_unique<TinkerSubtarget>(TargetTriple, TargetCPU, TargetFS,
-                                          *this);
+    SubtargetSingleton = std::make_unique<TinkerSubtarget>(
+        TargetTriple, TargetCPU, TargetFS, *this);
   return SubtargetSingleton.get();
 }
 

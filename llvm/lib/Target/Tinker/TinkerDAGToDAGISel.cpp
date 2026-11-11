@@ -1,6 +1,6 @@
+#include "MCTargetDesc/TinkerMCTargetDesc.h"
 #include "Tinker.h"
 #include "TinkerTargetMachine.h"
-#include "MCTargetDesc/TinkerMCTargetDesc.h"
 #include "llvm/CodeGen/SelectionDAGISel.h"
 #include "llvm/InitializePasses.h"
 #include "llvm/Pass.h"

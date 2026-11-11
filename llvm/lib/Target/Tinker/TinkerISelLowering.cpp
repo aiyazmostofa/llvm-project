@@ -1,10 +1,10 @@
 #include "TinkerISelLowering.h"
+#include "MCTargetDesc/TinkerMCTargetDesc.h"
 #include "TinkerSubtarget.h"
 #include "llvm/CodeGen/CallingConvLower.h"
 #include "llvm/CodeGen/MachineRegisterInfo.h"
 #include "llvm/CodeGen/SelectionDAG.h"
 #include "llvm/Target/TargetMachine.h"
-#include "MCTargetDesc/TinkerMCTargetDesc.h"
 
 using namespace llvm;
 
@@ -65,11 +65,12 @@ SDValue TinkerTargetLowering::LowerFormalArguments(
   return Chain;
 }
 
-SDValue TinkerTargetLowering::LowerReturn(
-    SDValue Chain, CallingConv::ID CallConv, bool IsVarArg,
-    const SmallVectorImpl<ISD::OutputArg> &Outs,
-    const SmallVectorImpl<SDValue> &OutVals, const SDLoc &DL,
-    SelectionDAG &DAG) const {
+SDValue
+TinkerTargetLowering::LowerReturn(SDValue Chain, CallingConv::ID CallConv,
+                                  bool IsVarArg,
+                                  const SmallVectorImpl<ISD::OutputArg> &Outs,
+                                  const SmallVectorImpl<SDValue> &OutVals,
+                                  const SDLoc &DL, SelectionDAG &DAG) const {
   if (Outs.size() > 1)
     report_fatal_error("can't return > 1 register");
 
@@ -88,7 +89,8 @@ SDValue TinkerTargetLowering::LowerReturn(
       report_fatal_error("stack return not yet implemented");
     if (VA.getLocInfo() != CCValAssign::Full &&
         VA.getLocInfo() != CCValAssign::BCvt)
-      report_fatal_error("extension/truncation of any sort, not yet implemented");
+      report_fatal_error(
+          "extension/truncation of any sort, not yet implemented");
 
     Chain = DAG.getCopyToReg(Chain, DL, VA.getLocReg(), OutVals[i], Glue);
     Glue = Chain.getValue(1);
@@ -145,7 +147,8 @@ SDValue TinkerTargetLowering::LowerADD(SDValue Op, SelectionDAG &DAG) const {
   if (Value.isNonNegative()) {
     return Op;
   }
-  return DAG.getNode(TinkerISD::SUBI_FROM_ADDI, SDLoc(Op), MVT::i64, Op.getOperand(0),
+  return DAG.getNode(TinkerISD::SUBI_FROM_ADDI, SDLoc(Op), MVT::i64,
+                     Op.getOperand(0),
                      DAG.getConstant(Value.abs(), SDLoc(Op), MVT::i64));
 }
 

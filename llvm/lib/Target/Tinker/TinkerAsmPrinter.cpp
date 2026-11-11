@@ -1,7 +1,7 @@
+#include "TargetInfo/TinkerTargetInfo.h"
 #include "llvm/CodeGen/AsmPrinter.h"
 #include "llvm/MC/MCStreamer.h"
 #include "llvm/MC/TargetRegistry.h"
-#include "TargetInfo/TinkerTargetInfo.h"
 
 namespace llvm {
 class TinkerAsmPrinter : public AsmPrinter {

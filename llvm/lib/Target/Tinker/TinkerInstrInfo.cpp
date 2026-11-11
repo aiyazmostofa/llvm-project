@@ -1,6 +1,6 @@
 #include "TinkerInstrInfo.h"
-#include "TinkerSubtarget.h"
 #include "MCTargetDesc/TinkerMCTargetDesc.h"
+#include "TinkerSubtarget.h"
 #include "llvm/CodeGen/MachineInstrBuilder.h"
 
 #define GET_INSTRINFO_CTOR_DTOR
@@ -18,5 +18,6 @@ void TinkerInstrInfo::copyPhysReg(MachineBasicBlock &MBB,
                                   Register SrcReg, bool KillSrc,
                                   bool RenamableDest, bool RenamableSrc) const {
   auto Opc = Tinker::Copy;
-  BuildMI(MBB, MI, DL, get(Opc), DestReg).addReg(SrcReg, getKillRegState(KillSrc));
+  BuildMI(MBB, MI, DL, get(Opc), DestReg)
+      .addReg(SrcReg, getKillRegState(KillSrc));
 }

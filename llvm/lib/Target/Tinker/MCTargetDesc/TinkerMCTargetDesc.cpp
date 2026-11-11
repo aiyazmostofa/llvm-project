@@ -40,9 +40,8 @@ static MCRegisterInfo *createTinkerMCRegisterInfo(const Triple &TT) {
   return X;
 }
 
-static MCSubtargetInfo *createTinkerMCSubtargetInfo(const Triple &TT,
-                                                    StringRef CPU,
-                                                    StringRef FS) {
+static MCSubtargetInfo *
+createTinkerMCSubtargetInfo(const Triple &TT, StringRef CPU, StringRef FS) {
   return createTinkerMCSubtargetInfoImpl(TT, CPU, /*TuneCPU*/ CPU, FS);
 }
 
@@ -59,7 +58,8 @@ extern "C" LLVM_ABI void LLVMInitializeTinkerTargetMC() {
   RegisterMCAsmInfoFn X(TheTarget, createTinkerMCAsmInfo);
   TargetRegistry::RegisterMCInstrInfo(TheTarget, createTinkerMCInstrInfo);
   TargetRegistry::RegisterMCRegInfo(TheTarget, createTinkerMCRegisterInfo);
-  TargetRegistry::RegisterMCSubtargetInfo(TheTarget, createTinkerMCSubtargetInfo);
+  TargetRegistry::RegisterMCSubtargetInfo(TheTarget,
+                                          createTinkerMCSubtargetInfo);
   TargetRegistry::RegisterMCCodeEmitter(TheTarget, createTinkerMCCodeEmitter);
   TargetRegistry::RegisterMCInstPrinter(TheTarget, createTinkerMCInstPrinter);
 }

@@ -4,7 +4,8 @@
 #include "llvm/MC/MCContext.h"
 #include "llvm/MC/MCInstrInfo.h"
 namespace llvm {
-MCCodeEmitter *createTinkerMCCodeEmitter(const MCInstrInfo &MCII, MCContext &Ctx);
+MCCodeEmitter *createTinkerMCCodeEmitter(const MCInstrInfo &MCII,
+                                         MCContext &Ctx);
 }
 
 #define GET_REGINFO_ENUM
