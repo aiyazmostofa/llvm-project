@@ -158,6 +158,9 @@ def : Pat<(br bb:$src0), (Jump (LoadTarget brtarget:$src0))>;
 def : Pat<(NodeBranchNotZero GPR:$src0, bb:$src1), (BranchNotZero (LoadTarget brtarget:$src1), GPR:$src0)>;
 def : Pat<(NodeBranchGreater GPR:$src0, GPR:$src1, bb:$src2), (BranchGreater (LoadTarget brtarget:$src2), GPR:$src0, GPR:$src1)>;
 
+// AI generated
+def : Pat<(i64 (select (i64 GPR:$cond), (i64 GPR:$x), (i64 GPR:$y))), (Xor GPR:$y, (And (Xor GPR:$x, GPR:$y), (Sub (i64 R0), GPR:$cond)))>;
+
 def Return : InstrFormat<"return", 0x0d> {
   let Uses = [R10, SP];
   let mayLoad = 1;

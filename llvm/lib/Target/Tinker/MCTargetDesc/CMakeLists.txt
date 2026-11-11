@@ -7,6 +7,7 @@ add_llvm_component_library(LLVMTinkerDesc
   LINK_COMPONENTS
   MC
   Support
+  TinkerInfo
 
   ADD_TO_COMPONENT
   Tinker

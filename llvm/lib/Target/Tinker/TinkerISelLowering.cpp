@@ -18,6 +18,7 @@ TinkerTargetLowering::TinkerTargetLowering(const TargetMachine &TM,
   setOperationAction(ISD::BR_CC, MVT::i64, Expand);
   setOperationAction(ISD::BRCOND, MVT::Other, Custom);
   setOperationAction(ISD::SETCC, MVT::i64, Custom);
+  setOperationAction(ISD::SELECT_CC, MVT::i64, Expand);
   setCondCodeAction(ISD::SETLT, MVT::i64, Expand);
   setCondCodeAction(ISD::SETLE, MVT::i64, Expand);
   setCondCodeAction(ISD::SETGE, MVT::i64, Expand);

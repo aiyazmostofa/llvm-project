@@ -26,6 +26,11 @@ add_llvm_target(TinkerCodeGen
   CodeGen
   SelectionDAG
   AsmPrinter
+  TinkerDesc
+  TinkerInfo
+  Core
+  Target
+  CodeGenTypes
 
   ADD_TO_COMPONENT
   Tinker
